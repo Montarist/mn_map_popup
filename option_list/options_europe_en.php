@@ -1,0 +1,53 @@
+
+<select id="contact-list-select" class="selectpicker form-control" data-live-search="true" data-dropup-auto="false" data-width="100%" data-size="10" tabindex="-98">
+    <option><?php echo __( 'Please select a country...' , 'map_popup' ); ?></option>
+    <option value="GB">United Kingdom</option>
+    <option value="AL">Albania</option>
+    <option value="AD">Andorra</option>
+    <option value="AT">Austria</option>
+    <option value="BY">Belarus</option>
+    <option value="BE">Belgium</option>
+    <option value="BA">Bosnia and Herzegovina</option>
+    <option value="BG">Bulgaria</option>
+    <option value="HR">Croatia (Hrvatska)</option>
+    <option value="CY">Cyprus</option>
+    <option value="CZ">Czech Republic</option>
+    <option value="FR">France</option>
+    <option value="GI">Gibraltar</option>
+    <option value="DE">Germany</option>
+    <option value="GR">Greece</option>
+    <option value="VA">Holy See (Vatican City State)</option>
+    <option value="HU">Hungary</option>
+    <option value="IT">Italy</option>
+    <option value="LI">Liechtenstein</option>
+    <option value="LU">Luxembourg</option>
+    <option value="MK">Macedonia</option>
+    <option value="MT">Malta</option>
+    <option value="MD">Moldova</option>
+    <option value="MC">Monaco</option>
+    <option value="ME">Montenegro</option>
+    <option value="NL">Netherlands</option>
+    <option value="PL">Poland</option>
+    <option value="PT">Portugal</option>
+    <option value="RO">Romania</option>
+    <option value="SM">San Marino</option>
+    <option value="RS">Serbia</option>
+    <option value="SK">Slovakia</option>
+    <option value="SI">Slovenia</option>
+    <option value="ES">Spain</option>
+    <option value="UA">Ukraine</option>
+    <option value="DK">Denmark</option>
+    <option value="EE">Estonia</option>
+    <option value="FO">Faroe Islands</option>
+    <option value="FI">Finland</option>
+    <option value="GL">Greenland</option>
+    <option value="IS">Iceland</option>
+    <option value="IE">Ireland</option>
+    <option value="LV">Latvia</option>
+    <option value="LT">Lithuania</option>
+    <option value="NO">Norway</option>
+    <option value="SJ">Svalbard and Jan Mayen Islands</option>
+    <option value="SE">Sweden</option>
+    <option value="CH">Switzerland</option>
+    <option value="TR">Turkey</option>
+</select>
