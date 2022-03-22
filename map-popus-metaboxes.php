@@ -57,53 +57,15 @@ class PopupDetailsMetaBox{
     public function dynamic_inner_custom_box($post) {
         $sub_items = get_post_meta($post->ID, 'sub_items', true);
         $item_count = 0;
-        if ( count( $sub_items ) > 0 ) {
     ?>
-            <div id="dynamic_inner_metabox">
-                <div class="sub-items">
-                    <?php
-                        foreach( $sub_items as $sub_item ) { ?>
-                            <hr>
-                            <div class="sub-item">
-                                <div class="head-of-subitem">
-                                    <h2 id="sub_items[<?php echo $item_count; ?>]"><?php echo $item_count + 1; ?>. <?php echo __( 'Item', 'map_popup' ); ?></h2>
-                                    <span class="remove"><?php echo __( 'Remove Item', 'map_popup' ); ?></span>
-                                </div>
-                                <table class="form-table lists-popup" id="sub_items[<?php echo $item_count; ?>][table]">
-                                    <tbody>
-                                        <tr>
-                                            <th><label for="sub_items[<?php echo $item_count; ?>][name]"><?php echo __( 'Item Name', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[<?php echo $item_count; ?>][name]" name="sub_items[<?php echo $item_count; ?>][name]" type="text" value="<?php echo $sub_item["name"]; ?>"></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="sub_items[<?php echo $item_count; ?>][phone_number]"><?php echo __( 'Item Phone Number', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[<?php echo $item_count; ?>][phone_number]" name="sub_items[<?php echo $item_count; ?>][phone_number]" type="tel" value="<?php echo $sub_item["phone_number"]; ?>"></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="sub_items[<?php echo $item_count; ?>][second_phone_number]"><?php echo __( 'Item 2. Phone Number', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[<?php echo $item_count; ?>][second_phone_number]" name="sub_items[<?php echo $item_count; ?>][second_phone_number]" type="tel" value="<?php echo $sub_item["second_phone_number"]; ?>"></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="sub_items[<?php echo $item_count; ?>][email]"><?php echo __( 'Item E-mail Address', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[<?php echo $item_count; ?>][email]" name="sub_items[<?php echo $item_count; ?>][email]" type="email" value="<?php echo $sub_item["email"]; ?>"></td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="sub_items[<?php echo $item_count; ?>][address]"><?php echo __( 'Item Address', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[<?php echo $item_count; ?>][address]" name="sub_items[<?php echo $item_count; ?>][address]" type="text" value="<?php echo $sub_item["address"]; ?>"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <?php
-                                $item_count++;
-                        }
-                    }
-                    ?>
-            </div>
-            <span class="add_new_item"><?php echo __('Add New Item', 'map_popup'); ?></span>
+        <div id="dynamic_inner_metabox">
+            <div class="sub-items">
             <script>
                 jQuery(document).ready(function() {
                     var count = <?php echo $item_count; ?>;
+                    if(count == 0) {
+                        count++;
+                    }
                     jQuery(".head-of-subitem h2").click(function() {
                         var id = jQuery(this).attr('id');
                         jQuery( '.lists-popup + #' + id + '[table]').show();
@@ -121,23 +83,23 @@ class PopupDetailsMetaBox{
                                     <tbody>
                                         <tr>
                                             <th><label for="sub_items[`+ count +`][name]"><?php echo __( 'Item Name', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[`+ count +`][name]" name="sub_items[`+ count +`][name]" type="text" value="<?php echo $sub_item["name"]; ?>"></td>
+                                            <td><input id="sub_items[`+ count +`][name]" name="sub_items[`+ count +`][name]" type="text" value=""></td>
                                         </tr>
                                         <tr>
                                             <th><label for="sub_items[`+ count +`][phone_number]"><?php echo __( 'Item Phone Number', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[`+ count +`][phone_number]" name="sub_items[`+ count +`][phone_number]" type="tel" value="<?php echo $sub_item["phone_number"]; ?>"></td>
+                                            <td><input id="sub_items[`+ count +`][phone_number]" name="sub_items[`+ count +`][phone_number]" type="tel" value=""></td>
                                         </tr>
                                         <tr>
                                             <th><label for="sub_items[`+ count +`][second_phone_number]"><?php echo __( 'Item 2. Phone Number', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[`+ count +`][second_phone_number]" name="sub_items[`+ count +`][second_phone_number]" type="tel" value="<?php echo $sub_item["second_phone_number"]; ?>"></td>
+                                            <td><input id="sub_items[`+ count +`][second_phone_number]" name="sub_items[`+ count +`][second_phone_number]" type="tel" value=""></td>
                                         </tr>
                                         <tr>
                                             <th><label for="sub_items[`+ count +`][email]"><?php echo __( 'Item E-mail Address', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[`+ count +`][email]" name="sub_items[`+ count +`][email]" type="email" value="<?php echo $sub_item["email"]; ?>"></td>
+                                            <td><input id="sub_items[`+ count +`][email]" name="sub_items[`+ count +`][email]" type="email" value=""></td>
                                         </tr>
                                         <tr>
                                             <th><label for="sub_items[`+ count +`][address]"><?php echo __( 'Item Address', 'map_popup' ); ?></label></th>
-                                            <td><input id="sub_items[`+ count +`][address]" name="sub_items[`+ count +`][address]" type="text" value="<?php echo $sub_item["address"]; ?>"></td>
+                                            <td><input id="sub_items[`+ count +`][address]" name="sub_items[`+ count +`][address]" type="text" value=""></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -150,39 +112,87 @@ class PopupDetailsMetaBox{
                         jQuery(this).parent().parent().remove();
                     });
                 });
-                </script>
-                <style>
-                    
-                    .sub-item {
-                        display: block;
-                        margin-bottom: 10px;
-                    }
-                    .head-of-subitem {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    }
-                    .head-of-subitem h2 {
-                        font-weight: bold !important;
-                        color: #333;
-                        cursor: pointer;
-                        margin: 0;
-                        padding: 5px 0 !important;
-                    }
-                    .head-of-subitem .remove {
-                        color: #a00;
-                        cursor: pointer;
-                    }
-                    .add_new_item {
-                        color: #333;
-                        cursor: pointer;
-                        margin: 10px 0;
-                        padding: 5px 0 !important;
-                        border: 1px solid #333;
-                        border-radius: 5px;
-                    }
-                </style>
+            </script>
+            <style>
+                .sub-item {
+                    display: block;
+                    margin-bottom: 10px;
+                }
+                .head-of-subitem {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .head-of-subitem h2 {
+                    font-weight: bold !important;
+                    color: #333;
+                    cursor: pointer;
+                    margin: 0;
+                    padding: 5px 0 !important;
+                }
+                .head-of-subitem .remove {
+                    color: #a00;
+                    cursor: pointer;
+                }
+                .add_new_item {
+                    color: #333;
+                    cursor: pointer;
+                    margin: 10px 0;
+                    padding: 5px 10px !important;
+                    border: 1px solid #333;
+                    border-radius: 5px;
+                }
+            </style>
+        <?php 
+            if(!empty($sub_items)){
+                $item_count = count($sub_items);
+            }
+            if ( $item_count ) :
+        ?>
+                <?php
+                    foreach( $sub_items as $sub_item ) : ?>
+                        <hr>
+                        <div class="sub-item">
+                            <div class="head-of-subitem">
+                                <h2 id="sub_items[<?php echo $item_count; ?>]"><?php echo $item_count; ?>. <?php echo __( 'Item', 'map_popup' ); ?></h2>
+                                <span class="remove"><?php echo __( 'Remove Item', 'map_popup' ); ?></span>
+                            </div>
+                            <table class="form-table lists-popup" id="sub_items[<?php echo $item_count; ?>][table]">
+                                <tbody>
+                                    <tr>
+                                        <th><label for="sub_items[<?php echo $item_count; ?>][name]"><?php echo __( 'Item Name', 'map_popup' ); ?></label></th>
+                                        <td><input id="sub_items[<?php echo $item_count; ?>][name]" name="sub_items[<?php echo $item_count; ?>][name]" type="text" value="<?php echo $sub_item["name"]; ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="sub_items[<?php echo $item_count; ?>][phone_number]"><?php echo __( 'Item Phone Number', 'map_popup' ); ?></label></th>
+                                        <td><input id="sub_items[<?php echo $item_count; ?>][phone_number]" name="sub_items[<?php echo $item_count; ?>][phone_number]" type="tel" value="<?php echo $sub_item["phone_number"]; ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="sub_items[<?php echo $item_count; ?>][second_phone_number]"><?php echo __( 'Item 2. Phone Number', 'map_popup' ); ?></label></th>
+                                        <td><input id="sub_items[<?php echo $item_count; ?>][second_phone_number]" name="sub_items[<?php echo $item_count; ?>][second_phone_number]" type="tel" value="<?php echo $sub_item["second_phone_number"]; ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="sub_items[<?php echo $item_count; ?>][email]"><?php echo __( 'Item E-mail Address', 'map_popup' ); ?></label></th>
+                                        <td><input id="sub_items[<?php echo $item_count; ?>][email]" name="sub_items[<?php echo $item_count; ?>][email]" type="email" value="<?php echo $sub_item["email"]; ?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="sub_items[<?php echo $item_count; ?>][address]"><?php echo __( 'Item Address', 'map_popup' ); ?></label></th>
+                                        <td><input id="sub_items[<?php echo $item_count; ?>][address]" name="sub_items[<?php echo $item_count; ?>][address]" type="text" value="<?php echo $sub_item["address"]; ?>"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <?php
+                            $item_count++;
+                    endforeach;
+                ?>
+                <span class="add_new_item"><?php echo __('Add New Item', 'map_popup'); ?></span>
+                 </div>
             </div>
+        <?php
+            else : ?>
+                <span class="add_new_item"><?php echo __('Add New Item', 'map_popup'); ?></span>
+                <p><?php echo __('No items found', 'map_popup'); ?></p>
+        <?php endif; ?>
     <?php }
 
 	public function add_meta_boxes($post_type) {
@@ -203,8 +213,21 @@ class PopupDetailsMetaBox{
 	public function meta_box_callback( $post ) {
 		wp_nonce_field( 'popup_details_data', 'popup_details_nonce' );
                 echo 'Popup Details Description';
+        $map_popup_options = get_option( 'map_popup_option_name' ); // Array of All Options
+        $selected_map = $map_popup_options['map_selected_area'];
+    ?>
+        <table class="form-table" id="select_any_country_for_popup">
+            <tbody>
+                <tr>
+                    <th><label for="contact-list-select"><?php echo __( 'Popup for which Area', 'map_popup' ); ?></label></th>
+                    <td><?php require_once(plugin_dir_path(__FILE__) . 'option_list/options_'. $selected_map .'.php'); ?></td>
+                </tr>
+            </tbody>
+        </table>
+    <?php
 		$this->field_generator( $post );
         $this->dynamic_inner_custom_box( $post );
+        
 	}
         public function media_fields() {
             ?><script>

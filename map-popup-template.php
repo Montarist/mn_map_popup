@@ -1,10 +1,10 @@
 <?php 
 
 $map_popup_options = get_option( 'map_popup_option_name' ); // Array of All Options
-$map_main_color = $map_popup_options['map_main_color'];
-$map_hover_color = $map_popup_options['map_hover_color'];
-$map_which_area = $map_popup_options['map_which_area'];
-$selected_map = $map_popup_options['map_selected_area'];
+$map_main_color = $map_popup_options['map_main_color']; // Settings 1
+$map_hover_color = $map_popup_options['map_hover_color']; // Settings 2
+$map_which_area = $map_popup_options['map_which_area']; // Settings 3
+$selected_map = $map_popup_options['map_selected_area']; // Settings 3
 
 echo $selected_map . "</br>";
 echo $map_main_color . "</br>";
