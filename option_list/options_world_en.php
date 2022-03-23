@@ -1,4 +1,4 @@
-<select id="contact-list-select" class="selectpicker form-control" data-live-search="true" data-dropup-auto="false" data-width="100%" data-size="10" tabindex="-98">
+<select id="contact-list-select" class="selectpicker form-control" data-live-search="true" data-dropup-auto="false" data-width="100%" data-size="10" tabindex="-98" multiple>
     <option><?php echo __( 'Please select a country...' , 'map_popup' ); ?></option>
     <option value="AF">Afghanistan</option>
     <option value="AL">Albania</option>

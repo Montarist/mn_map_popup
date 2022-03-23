@@ -212,10 +212,34 @@ class PopupDetailsMetaBox{
 
 	public function meta_box_callback( $post ) {
 		wp_nonce_field( 'popup_details_data', 'popup_details_nonce' );
-                echo 'Popup Details Description';
+        echo 'Popup Details Description';
         $map_popup_options = get_option( 'map_popup_option_name' ); // Array of All Options
         $selected_map = $map_popup_options['map_selected_area'];
-    ?>
+        $metaboxSelect = maybe_unserialize( get_post_meta($post->ID, "metaboxSelect", true) );
+        wp_nonce_field( 'save_quote_meta', 'custom_nonce' ); 
+        
+        if($metaboxSelect) : ?>
+            <script>
+                jQuery(document).ready(function($) {
+                    jQuery("#contact-list-select").css({
+                        "width" : "50%",
+                        "height": "250px"
+                    });
+                    <?php foreach($metaboxSelect as $metaboxSelectOption) : ?>
+                            jQuery("select[name*='metaboxSelect[]']").children().each(function () {
+                                var value = jQuery(this).attr("value");
+                                if (value == "<?php echo $metaboxSelectOption; ?>") {
+                                    jQuery("select[name*='metaboxSelect[]'] option[value='"+ value +"']").css({
+                                        "background-color" : "#000"
+                                    });
+                                }
+                            });
+                    <?php endforeach; ?>
+                    
+                });
+            </script>
+        <?php endif; ?>
+        
         <table class="form-table" id="select_any_country_for_popup">
             <tbody>
                 <tr>
@@ -227,46 +251,47 @@ class PopupDetailsMetaBox{
     <?php
 		$this->field_generator( $post );
         $this->dynamic_inner_custom_box( $post );
-        
-	}
-        public function media_fields() {
-            ?><script>
-                jQuery(document).ready(function($){
-                    if ( typeof wp.media !== 'undefined' ) {
-                        var _custom_media = true,
-                        _orig_send_attachment = wp.media.editor.send.attachment;
-                        jQuery('.new-media').click(function(e) {
-                            var send_attachment_bkp = wp.media.editor.send.attachment;
-                            var button = jQuery(this);
-                            var id = button.attr('id').replace('_button', '');
-                            _custom_media = true;
-                                wp.media.editor.send.attachment = function(props, attachment){
-                                if ( _custom_media ) {
-                                    if (jQuery('input#' + id).data('return') == 'url') {
-                                        jQuery('input#' + id).val(attachment.url);
-                                    } else {
-                                        jQuery('input#' + id).val(attachment.id);
-                                    }
-                                    jQuery('div#preview'+id).css('background-image', 'url('+attachment.url+')');
+    }
+
+    public function media_fields() { ?>
+        <script>
+            jQuery(document).ready(function($) {
+                if ( typeof wp.media !== 'undefined' ) {
+                    var _custom_media = true,
+                    _orig_send_attachment = wp.media.editor.send.attachment;
+                    jQuery('.new-media').click(function(e) {
+                        var send_attachment_bkp = wp.media.editor.send.attachment;
+                        var button = jQuery(this);
+                        var id = button.attr('id').replace('_button', '');
+                        _custom_media = true;
+                            wp.media.editor.send.attachment = function(props, attachment){
+                            if ( _custom_media ) {
+                                if (jQuery('input#' + id).data('return') == 'url') {
+                                    jQuery('input#' + id).val(attachment.url);
                                 } else {
-                                    return _orig_send_attachment.apply( this, [props, attachment] );
-                                };
-                            }
-                            wp.media.editor.open(button);
-                            return false;
-                        });
-                        jQuery('.add_media').on('click', function(){
-                            _custom_media = false;
-                        });
-                        jQuery('.remove-media').on('click', function(){
-                            var parent = jQuery(this).parents('td');
-                            parent.find('input[type="text"]').val('');
-                            parent.find('div').css('background-image', 'url()');
-                        });
-                    }
-                });
-            </script><?php
-        }
+                                    jQuery('input#' + id).val(attachment.id);
+                                }
+                                jQuery('div#preview'+id).css('background-image', 'url('+attachment.url+')');
+                            } else {
+                                return _orig_send_attachment.apply( this, [props, attachment] );
+                            };
+                        }
+                        wp.media.editor.open(button);
+                        return false;
+                    });
+                    jQuery('.add_media').on('click', function(){
+                        _custom_media = false;
+                    });
+                    jQuery('.remove-media').on('click', function(){
+                        var parent = jQuery(this).parents('td');
+                        parent.find('input[type="text"]').val('');
+                        parent.find('div').css('background-image', 'url()');
+                    });
+                }
+            });
+        </script>
+    <?php
+    }
 
 	public function field_generator( $post ) {
 		$output = '';
@@ -349,6 +374,11 @@ class PopupDetailsMetaBox{
 
         $sub_items = $_POST['sub_items'];
         update_post_meta( $post_id, 'sub_items', $sub_items );
+
+        if ( isset($_POST['metaboxSelect']) ) {
+            update_post_meta($post_id, "metaboxSelect", $_POST['metaboxSelect'] );
+        }
+    
 	}
 }
 ?>
