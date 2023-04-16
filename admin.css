@@ -1,0 +1,62 @@
+.representative_field p label,
+.dealer_field p label {
+    font-weight: bold;
+}
+
+.representative_field p,
+.dealer_field p {
+    display: flex;
+    width: 450px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.representative_field input,
+.dealer_field input,
+.representative_field textarea,
+.dealer_field textarea {
+    min-width: 300px;
+}
+
+.representative_field input[type="button"],
+.dealer_field input[type="button"] {
+    padding: 10px;
+}
+
+.action_buttons {
+    padding: 0;
+    margin: 0;
+}
+
+.action_buttons input {
+    text-indent: -9999px;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 0 !important;
+    background: none;
+    outline: none;
+    border: none;
+    z-index: 99;
+    cursor: pointer;
+    position: relative;
+}
+
+.action_buttons.add,
+.action_buttons.remove {
+    position: relative;
+}
+
+.action_buttons.add i,
+.action_buttons.remove i {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.action_buttons.add i::before,
+.action_buttons.remove i::before {
+    cursor: pointer;
+    line-height: 1 !important;
+}
