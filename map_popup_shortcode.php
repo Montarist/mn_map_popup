@@ -565,6 +565,6 @@ function map_popup_shortcode($atts)
     ob_end_clean();
     return $output;
 }
-add_shortcode('map_popup_posts', 'map_popup_shortcode');
+add_shortcode('map_popup', 'map_popup_shortcode');
 
 ?>

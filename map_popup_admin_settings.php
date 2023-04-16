@@ -204,13 +204,17 @@ function map_popup_register_settings()
 add_action('admin_init', 'map_popup_register_settings');
 function is_valid_api_key($api_key)
 {
+    // Web sitesi URL'sini alın
     $website_url = get_site_url();
-    $encoded_request_url = 'aHR0cHM6Ly9oZXJlbmtlc2tpbi5jb20vYXBpLWtleS12YWxpZGF0aW9uLnBocD9hcGlfa2V5PQ==';
-    $decoded_request_url = base64_decode($encoded_request_url);
-    $request_url = $decoded_request_url . urlencode($api_key) . '&website=' . urlencode($website_url);
+
+    // API isteği için URL'yi oluşturun
+    $request_url = 'https://herenkeskin.com/api-key-validation.php?api_key=' . urlencode($api_key) . '&website=' . urlencode($website_url);
+
+    // Uzak isteği gerçekleştirin
     $response = wp_remote_get($request_url);
 
     if (is_wp_error($response)) {
+        // Hata durumunda uygun bir hata mesajı döndürün
         return false;
     }
 
