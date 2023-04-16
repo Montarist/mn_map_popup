@@ -8,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       Map Popup Plugin 
  * Plugin URI:        https://herenkeskin.com/wordpress-map-popups-plugin
- * Description:       Map popup plugin with JQvmap
+ * Description:       Map Popup Plugin allows you to create a custom post type for popups and display dealer or representative information on selected regions using dnomak Turkey Map.
  * Version:           1.0.0
  * Author:            Hasan Eren Keskin
  * Author URI:        https://herenkeskin.com
@@ -17,6 +17,7 @@
  * Text Domain:       map-popup
  * Domain Path:       /languages
  */
+
 // Admin Settings
 require_once plugin_dir_path(__FILE__) . 'map_popup_admin_settings.php';
 
