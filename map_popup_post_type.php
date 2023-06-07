@@ -7,16 +7,22 @@ function map_popup_register_post_type()
         return;
     }
     $labels = array(
-        'name' => __('Popups', 'map-popup'),
-        'singular_name' => __('Popups', 'map-popup')
+        'name' => __('Popups', 'mn-map-popup'),
+        'singular_name' => __('Popups', 'mn-map-popup')
     );
 
     $args = array(
         'labels' => $labels,
         'public' => true,
         'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => true,
+        'show_in_admin_bar' => true,
+        'menu_position' => 20,
+        'menu_icon' => 'dashicons-location-alt',
         'has_archive' => false,
-        'supports' => array('title', 'thumbnail', 'custom-fields')
+        'supports' => array('title', 'thumbnail')
     );
 
     register_post_type('map_popup_post', $args);

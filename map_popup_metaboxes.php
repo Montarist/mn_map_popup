@@ -7,7 +7,7 @@ function map_popup_add_meta_boxes()
 {
     add_meta_box(
         'map_popup_state_meta_box',
-        __('States', 'map-popup'),
+        __('States', 'mn-map-popup'),
         'map_popup_state_meta_box',
         'map_popup_post',
         'normal',
@@ -16,7 +16,7 @@ function map_popup_add_meta_boxes()
 
     add_meta_box(
         'map_popup_representative_meta_box',
-        __('Representative', 'map-popup'),
+        __('Representative', 'mn-map-popup'),
         'map_popup_representative_meta_box',
         'map_popup_post',
         'normal',
@@ -25,7 +25,7 @@ function map_popup_add_meta_boxes()
 
     add_meta_box(
         'map_popup_dealer_meta_box',
-        __('Dealers', 'map-popup'),
+        __('Dealers', 'mn-map-popup'),
         'map_popup_dealer_meta_box',
         'map_popup_post',
         'normal',
@@ -43,13 +43,15 @@ function map_popup_state_meta_box($post)
 
     $selected_cities = get_post_meta($post->ID, 'selected_cities', true);
 
-    echo '<p>';
+    echo '<div class="cities_list" style="display: flex; flex-wrap: wrap;">';
     foreach ($cities as $city) {
         $checked = (isset($selected_cities[$city['id']]) && $selected_cities[$city['id']] == '1') ? 'checked' : '';
+        echo '<div class="city_checkbox" style="width: 16%;">';
         echo '<input type="checkbox" id="city_' . $city['id'] . '" name="selected_cities[' . $city['id'] . ']" value="1" ' . $checked . ' />';
-        echo '<label for="city_' . $city['id'] . '">' . $city['iladi'] . '</label><br>';
+        echo '<label for="city_' . $city['id'] . '">' . $city['plakakodu'] . ' - ' . $city['iladi'] . '</label><br>';
+        echo '</div>';
     }
-    echo '</p>';
+    echo '</div>';
 }
 
 function map_popup_state_save_post($post_id)
@@ -79,55 +81,57 @@ function map_popup_representative_meta_box($post)
 
     $representative_fields_data = get_post_meta($post->ID, 'representative_fields_data', true);
 
-    // var_dump($representative_fields_data);
-
-    $field_number = count($representative_fields_data['representative_position']);
+    if (isset($representative_fields_data['representative_position']) && is_array($representative_fields_data['representative_position'])) {
+        $field_number = count($representative_fields_data['representative_position']);
+    } else {
+        $field_number = 0;
+    }
 
     echo '<div id="representative_fields_container">';
     for ($i = 0; $i < $field_number; $i++) { ?>
         <div class="representative_field">
             <p>
                 <label>
-                    <?php echo __('Name', 'map-popup'); ?>:
+                    <?php echo __('Name', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="representative_name[]"
                     value="<?php echo esc_attr($representative_fields_data['representative_name'][$i]); ?>">
             </p>
             <p>
                 <label>
-                    <?php echo __('Position', 'map-popup'); ?>:
+                    <?php echo __('Position', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="representative_position[]"
                     value="<?php echo esc_attr($representative_fields_data['representative_position'][$i]); ?>">
             </p>
             <p>
                 <label>
-                    <?php echo __('Email', 'map-popup'); ?>:
+                    <?php echo __('Email', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="representative_email[]"
                     value="<?php echo esc_attr($representative_fields_data['representative_email'][$i]); ?>">
             </p>
             <p>
                 <label>
-                    <?php echo __('Phone', 'map-popup'); ?>:
+                    <?php echo __('Phone', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="representative_phone[]"
                     value="<?php echo esc_attr($representative_fields_data['representative_phone'][$i]); ?>">
             </p>
             <p>
                 <label>
-                    <?php echo __('Photo', 'map-popup'); ?>:
+                    <?php echo __('Photo', 'mn-map-popup'); ?>:
                 </label>
                 <input type="hidden" class="image-url" name="representative_photo[]"
                     value="<?php echo esc_attr($representative_fields_data['representative_photo'][$i]); ?>">
                 <img src="<?php echo esc_attr($representative_fields_data['representative_photo'][$i]); ?>"
                     class="image-preview" style="max-width: 100px;">
-                <input type="button" class="upload-image-button" value="<?php echo __('Upload Image', 'map-popup'); ?>">
+                <input type="button" class="upload-image-button" value="<?php echo __('Upload Image', 'mn-map-popup'); ?>">
             </p>
             <p class="action_buttons remove">
                 <i class="fa-solid fa-2xl fa-square-minus"></i>
                 <input type="button" class="remove_representative_field_button"
-                    value="<?php echo __('Remove Field', 'map-popup'); ?>">
+                    value="<?php echo __('Remove Field', 'mn-map-popup'); ?>">
             </p>
             <hr>
         </div>
@@ -141,7 +145,7 @@ function map_popup_representative_meta_box($post)
     ?>
     <p class="action_buttons add">
         <i class="fa-solid fa-2xl fa-square-plus"></i>
-        <input type="button" id="add_representative_field_button" value="<?php echo __('Add Field', 'map-popup'); ?>">
+        <input type="button" id="add_representative_field_button" value="<?php echo __('Add Field', 'mn-map-popup'); ?>">
     </p>
     <?php
 }
@@ -187,55 +191,73 @@ function map_popup_dealer_meta_box($post)
 
     $dealer_fields_data = get_post_meta($post->ID, 'dealer_fields_data', true);
 
-    // var_dump($dealer_fields_data);
-
-    $field_number = count($dealer_fields_data['dealer_name']);
+    if (isset($dealer_fields_data['dealer_name']) && is_array($dealer_fields_data['dealer_name'])) {
+        $field_number = count($dealer_fields_data['dealer_name']);
+    } else {
+        $field_number = 0;
+    }
 
     echo '<div id="dealer_fields_container">';
 
     for ($i = 0; $i < $field_number; $i++) { ?>
         <div class="dealer_field">
+
             <p>
                 <label>
-                    <?php echo __('Name', 'map-popup'); ?>:
+                    <?php echo __('Name', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="dealer_name[]" value="<?php echo esc_attr($dealer_fields_data['dealer_name'][$i]); ?>">
             </p>
             <p>
                 <label>
-                    <?php echo __('Position', 'map-popup'); ?>:
-                </label>
-                <input type="text" name="dealer_position[]"
-                    value="<?php echo esc_attr($dealer_fields_data['dealer_position'][$i]); ?>">
-            </p>
-            <p>
-                <label>
-                    <?php echo __('Email', 'map-popup'); ?>:
+                    <?php echo __('Email', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="dealer_email[]"
                     value="<?php echo esc_attr($dealer_fields_data['dealer_email'][$i]); ?>">
             </p>
             <p>
                 <label>
-                    <?php echo __('Phone', 'map-popup'); ?>:
+                    <?php echo __('Website', 'mn-map-popup'); ?>:
+                </label>
+                <input type="text" name="dealer_website[]"
+                    value="<?php echo esc_attr($dealer_fields_data['dealer_website'][$i]); ?>">
+            </p>
+            <p>
+                <label>
+                    <?php echo __('Phone', 'mn-map-popup'); ?>:
                 </label>
                 <input type="text" name="dealer_phone[]"
                     value="<?php echo esc_attr($dealer_fields_data['dealer_phone'][$i]); ?>">
             </p>
+
             <p>
                 <label>
-                    <?php echo __('Photo', 'map-popup'); ?>:
+                    <?php echo __('Fax', 'mn-map-popup'); ?>:
+                </label>
+                <input type="text" name="dealer_fax[]" value="<?php echo esc_attr($dealer_fields_data['dealer_fax'][$i]); ?>">
+            </p>
+            <p>
+                <label>
+                    <?php echo __('Address', 'mn-map-popup'); ?>:
+                </label>
+                <textarea name="dealer_address[]"><?php echo esc_attr($dealer_fields_data['dealer_address'][$i]); ?></textarea>
+            </p>
+            <p>
+                <label>
+                    <?php echo __('Photo', 'mn-map-popup'); ?>:
                 </label>
                 <input type="hidden" class="image-url" name="dealer_photo[]"
                     value="<?php echo esc_attr($dealer_fields_data['dealer_photo'][$i]); ?>">
                 <img src="<?php echo esc_attr($dealer_fields_data['dealer_photo'][$i]); ?>" class="image-preview"
                     style="max-width: 100px;">
-                <input type="button" class="upload-image-button" value="<?php echo __('Upload Image', 'map-popup'); ?>">
+                <input type="button" class="upload-image-button" value="<?php echo __('Upload Image', 'mn-map-popup'); ?>">
             </p>
             <p class="action_buttons remove">
                 <i class="fa-solid fa-2xl fa-square-minus"></i>
-                <input type="button" class="remove_dealer_field_button" value="<?php echo __('Remove Field', 'map-popup'); ?>">
+                <input type="button" class="remove_dealer_field_button"
+                    value="<?php echo __('Remove Field', 'mn-map-popup'); ?>">
             </p>
+
             <hr>
         </div>
 
@@ -247,7 +269,7 @@ function map_popup_dealer_meta_box($post)
     ?>
     <p class="action_buttons add">
         <i class="fa-solid fa-2xl fa-square-plus"></i>
-        <input type="button" id="add_dealer_field_button" value="<?php echo __('Add Field', 'map-popup'); ?>">
+        <input type="button" id="add_dealer_field_button" value="<?php echo __('Add Field', 'mn-map-popup'); ?>">
     </p>
     <?php
 }

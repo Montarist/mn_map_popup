@@ -4,12 +4,10 @@
 require_once plugin_dir_path(__FILE__) . 'utils.php';
 
 // Create shortcode
-function map_popup_shortcode($atts)
+function mn_map_popup_shortcode($atts)
 {
-    $api_key = get_option('map_api_key');
-
     if (!map_popup_is_api_key_valid()) {
-        echo '<p style="color: red;">' . __('Valid API key is required.', 'map-popup') . '</p>';
+        echo '<p style="color: red;">' . __('Valid API key is required.', 'mn-map-popup') . '</p>';
         return;
     }
 
@@ -24,23 +22,27 @@ function map_popup_shortcode($atts)
     $map_popup_posts = new WP_Query($args);
 
     if (!$map_popup_posts->have_posts()) {
+        echo __("Please add a popup window to show the map", 'mn-map-popup');
         return '';
     }
 
-    $map_background_color = get_option('map_background_color');
-    $map_hover_color = get_option('map_hover_color');
-    $map_selected_area_color = get_option('map_selected_area_color');
-    $popup_header_color = get_option('popup_header_color');
-    $popup_text_color = get_option('popup_text_color');
-    $popup_button_background_color = get_option('popup_button_background_color');
-    $popup_button_text_color = get_option('popup_button_text_color');
+    $mn_map_popup_options = get_option('mn_map_popup_option_name'); // Array of All Options
+    $api_key_0 = $mn_map_popup_options['api_key_0']; // API Key
+    $map_background_color_1 = $mn_map_popup_options['map_background_color_1']; // Map Background Color
+    $map_hover_color_2 = $mn_map_popup_options['map_hover_color_2']; // Map Hover Color
+    $map_selected_area_color_3 = $mn_map_popup_options['map_selected_area_color_3']; // Map Selected Area Color
+    $map_mouseover_area_color_10 = $mn_map_popup_options['map_mouseover_area_color_10']; // Map Selected Area Color
+    $popup_header_color_4 = $mn_map_popup_options['popup_header_color_4']; // Popup Header Color
+    $popup_text_color_5 = $mn_map_popup_options['popup_text_color_5']; // Popup Text Color
+    $popup_button_background_color_6 = $mn_map_popup_options['popup_button_background_color_6']; // Popup Button Background Color
+    $popup_button_text_color_7 = $mn_map_popup_options['popup_button_text_color_7']; // Popup Button Text Color
+    $representative_title_text_8 = $mn_map_popup_options['representative_title_text_8']; // Representative Title Text
+    $dealer_title_text_9 = $mn_map_popup_options['dealer_title_text_9']; // Dealer Title Text
 
     echo '<div class="map-popup-container">';
 
     // Turkey Map
     require_once plugin_dir_path(__FILE__) . 'view/turkey-map.php';
-
-    // include plugin_dir_path(__FILE__) . 'view/turkey-map.php';
 
     echo '<div class="all-dealers">';
 
@@ -49,61 +51,33 @@ function map_popup_shortcode($atts)
 
         $representative_fields_data = get_post_meta(get_the_ID(), 'representative_fields_data', true);
         $dealer_fields_data = get_post_meta(get_the_ID(), 'dealer_fields_data', true);
-
-
-        if (!$representative_fields_data) {
-            continue;
+        
+        if (isset($dealer_fields_data['dealer_name']) && is_array($dealer_fields_data['dealer_name'])) {
+            $dealer_field_number = count($dealer_fields_data['dealer_name']);
+        } else {
+            $dealer_field_number = 0;
         }
 
-        if (!$dealer_fields_data) {
-            continue;
+        if (isset($representative_fields_data['representative_name']) && is_array($representative_fields_data['representative_name'])) {
+            $representative_field_number = count($representative_fields_data['representative_name']);
+        } else {
+            $representative_field_number = 0;
         }
-
-        $dealer_field_number = count($dealer_fields_data['dealer_name']);
-        $representative_field_number = count($representative_fields_data['representative_name']);
 
         $selected_cities = get_post_meta(get_the_ID(), 'selected_cities', true);
         if ($selected_cities) {
-
             $cities = get_cities_array();
             $cities_alan_kodu = array();
 
             foreach ($cities as $city) {
                 if (isset($selected_cities[$city['id']]) && $selected_cities[$city['id']] == '1') {
                     array_push($cities_alan_kodu, $city['alankodu']);
-                    // echo '<li>' . $city['iladi'] . ' (Plaka Kodu: ' . $city['plakakodu'] . ', Alan Kodu: ' . $city['alankodu'] . ')</li>';
                 }
             }
-        }
+        } 
 
         $cities_alan_kodu_json = json_encode($cities_alan_kodu);
 
-        // for ($i = 0; $i < $dealer_field_number; $i++) {
-        //     echo '<div class="dynamic_field">';
-        //     echo '<p>' . esc_attr($dealer_fields_data['dealer_position'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($dealer_fields_data['dealer_phone'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($dealer_fields_data['dealer_email'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($dealer_fields_data['dealer_address'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($dealer_fields_data['dealer_fax'][$i]) . '</p>';
-        //     echo '<p><img src="' . esc_attr($dealer_fields_data['dealer_photo'][$i]) . '" class="image-preview" style="max-width: 100px;"></p>';
-        //     echo '<hr></div>';
-        // }
-
-        // echo '<div id="representative_fields_container">';
-        // echo '<h1>Representative</h1>';
-
-        // for ($i = 0; $i < $representative_field_number; $i++) {
-        //     echo '<div class="dynamic_field">';
-        //     echo '<p>' . esc_attr($representative_fields_data['representative_position'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($representative_fields_data['representative_phone'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($representative_fields_data['representative_email'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($representative_fields_data['representative_address'][$i]) . '</p>';
-        //     echo '<p>' . esc_attr($representative_fields_data['representative_fax'][$i]) . '</p>';
-        //     echo '<p><img src="' . esc_attr($representative_fields_data['representative_photo'][$i]) . '" class="image-preview" style="max-width: 100px;"></p>';
-        //     echo '<hr></div>';
-        // }
-
-        // echo '</div>';
         ?>
         <div class="dealers-on-region" data-alankodu='<?php echo $cities_alan_kodu_json; ?>'>
             <i class="fa-solid fa-map-location-dot"></i>
@@ -113,7 +87,7 @@ function map_popup_shortcode($atts)
             <?php if ($representative_field_number > 0) { ?>
                 <div class="common-information">
                     <h4>
-                        <?php echo __('Responsible Officers in the Region', 'map-popup'); ?>
+                        <?php echo __($representative_title_text_8, 'mn-map-popup'); ?>
                     </h4>
                     <div class="common-content">
                         <?php for ($i = 0; $i < $representative_field_number; $i++) { ?>
@@ -144,7 +118,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-envelope"></i>
                                             <span>
-                                                <?php echo __('Officer Email', 'map-popup'); ?>:
+                                                <?php echo __('Officer Email', 'mn-map-popup'); ?>:
                                             </span>
                                             <a href="mailto:<?php echo esc_attr($representative_fields_data['representative_email'][$i]); ?>"
                                                 target="_blank"><?php echo esc_attr($representative_fields_data['representative_email'][$i]); ?>
@@ -155,7 +129,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-phone-volume"></i>
                                             <span>
-                                                <?php echo __('Officer Phone', 'map-popup'); ?>:
+                                                <?php echo __('Officer Phone', 'mn-map-popup'); ?>:
                                             </span>
                                             <a href="tel://<?php echo trim(esc_attr($representative_fields_data['representative_phone'][$i])); ?>"
                                                 target="_blank">
@@ -173,7 +147,7 @@ function map_popup_shortcode($atts)
             <?php if ($dealer_field_number > 0) { ?>
                 <div class="common-information">
                     <h4>
-                        <?php echo __('Authorised Dealer in the Region', 'map-popup'); ?>
+                        <?php echo __($dealer_title_text_9, 'mn-map-popup'); ?>
                     </h4>
                     <div class="common-content">
                         <?php for ($i = 0; $i < $dealer_field_number; $i++) { ?>
@@ -197,7 +171,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-envelope"></i>
                                             <span>
-                                                <?php echo __('Dealer Email', 'map-popup'); ?>:
+                                                <?php echo __('Dealer Email', 'mn-map-popup'); ?>:
                                             </span>
                                             <a href="mailto:<?php echo esc_attr($dealer_fields_data['dealer_email'][$i]); ?>"
                                                 target="_blank">
@@ -210,7 +184,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-earth-europe"></i>
                                             <span>
-                                                <?php echo __('Dealer Website', 'map-popup'); ?>:
+                                                <?php echo __('Dealer Website', 'mn-map-popup'); ?>:
                                             </span>
                                             <a href="<?php echo esc_attr($dealer_fields_data['dealer_website'][$i]); ?>" target="_blank">
                                                 <?php echo esc_attr($dealer_fields_data['dealer_website'][$i]); ?>
@@ -222,7 +196,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-phone-volume"></i>
                                             <span>
-                                                <?php echo __('Dealer Phone', 'map-popup'); ?>:
+                                                <?php echo __('Dealer Phone', 'mn-map-popup'); ?>:
                                             </span>
                                             <a href="tel://<?php echo trim(esc_attr($dealer_fields_data['dealer_phone'][$i])); ?>"
                                                 target="_blank">
@@ -235,7 +209,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-fax"></i>
                                             <span>
-                                                <?php echo __('Dealer Fax', 'map-popup'); ?>:
+                                                <?php echo __('Dealer Fax', 'mn-map-popup'); ?>:
                                             </span>
                                             <?php echo esc_attr($dealer_fields_data['dealer_fax'][$i]); ?>
                                         </p>
@@ -245,7 +219,7 @@ function map_popup_shortcode($atts)
                                         <p>
                                             <i class="fa-solid fa-location-dot"></i>
                                             <span>
-                                                <?php echo __('Dealer Address', 'map-popup'); ?>:
+                                                <?php echo __('Dealer Address', 'mn-map-popup'); ?>:
                                             </span>
                                             <?php echo esc_attr($dealer_fields_data['dealer_address'][$i]); ?>
                                         </p>
@@ -254,9 +228,9 @@ function map_popup_shortcode($atts)
                                     <?php if ($dealer_fields_data['dealer_phone'][$i]) { ?>
                                         <p class="helper-buttons">
                                             <a href="https://www.google.com/maps/dir/<?php echo esc_attr($dealer_fields_data['dealer_address'][$i]); ?>"
-                                                target="_blank" class="helper-button"><?php echo __('Get Directions', 'map-popup'); ?></a>
+                                                target="_blank" class="helper-button"><?php echo __('Get Directions', 'mn-map-popup'); ?></a>
                                             <a href="tel://<?php echo trim(esc_attr($dealer_fields_data['dealer_phone'][$i])); ?>"
-                                                target="_blank" class="helper-button"><?php echo __('Call Dealer', 'map-popup'); ?></a>
+                                                target="_blank" class="helper-button"><?php echo __('Call Dealer', 'mn-map-popup'); ?></a>
                                         </p>
                                     <?php } ?>
 
@@ -278,35 +252,41 @@ function map_popup_shortcode($atts)
     ?>
     <style>
         :root {
-            --map_background_color:
-                <?php echo $map_background_color; ?>
+            --map_background_color_1:
+                <?php echo $map_background_color_1; ?>
             ;
-            --map_hover_color:
-                <?php echo $map_hover_color; ?>
+            --map_hover_color_2:
+                <?php echo $map_hover_color_2; ?>
             ;
-            --map_selected_area_color:
-                <?php echo $map_selected_area_color; ?>
+            --map_selected_area_color_3:
+                <?php echo $map_selected_area_color_3; ?>
             ;
-            --popup_header_color:
-                <?php echo $popup_header_color; ?>
+            --map_mouseover_area_color_10:
+                <?php echo $map_mouseover_area_color_10; ?>
             ;
-            --popup_text_color:
-                <?php echo $popup_text_color; ?>
+            --popup_header_color_4:
+                <?php echo $popup_header_color_4; ?>
             ;
-            --popup_button_background_color:
-                <?php echo $popup_button_background_color; ?>
+            --popup_text_color_5:
+                <?php echo $popup_text_color_5; ?>
             ;
-            --popup_button_text_color:
-                <?php echo $popup_button_text_color; ?>
+            --popup_button_background_color_6:
+                <?php echo $popup_button_background_color_6; ?>
+            ;
+            --popup_button_text_color_7:
+                <?php echo $popup_button_text_color_7; ?>
             ;
         }
 
         #svg-turkiye-haritasi path {
-            fill: var(--map_background_color);
+            fill: var(--map_background_color_1);
         }
 
         #svg-turkiye-haritasi path:hover {
-            fill: var(--map_hover_color);
+            fill: var(--map_hover_color_2);
+        }
+        .il-isimleri div {
+            background: var(--map_mouseover_area_color_10) !important;
         }
 
         .map-popup-container {
@@ -369,13 +349,13 @@ function map_popup_shortcode($atts)
 
         .common-information h4 {
             margin: 0 0 10px 0;
-            color: var(--popup_header_color);
+            color: var(--popup_header_color_4);
             font-size: 24px;
             font-weight: bold;
         }
 
         .common-information h3 {
-            color: var(--popup_text_color);
+            color: var(--popup_text_color_5);
             font-size: 16px;
             font-weight: bold;
             line-height: 16px;
@@ -385,7 +365,7 @@ function map_popup_shortcode($atts)
 
         .common-information p {
             margin: 0;
-            color: var(--popup_text_color);
+            color: var(--popup_text_color_5);
             font-size: 12px;
             line-height: 16px;
         }
@@ -398,7 +378,7 @@ function map_popup_shortcode($atts)
         }
 
         .common-detail {
-            color: var(--popup_text_color);
+            color: var(--popup_text_color_5);
             font-size: 12px;
             line-height: 16px;
             flex: 1;
@@ -425,7 +405,7 @@ function map_popup_shortcode($atts)
         }
 
         .common-detail a {
-            color: var(--popup_text_color);
+            color: var(--popup_text_color_5);
             text-decoration: none;
             font-size: 14px;
         }
@@ -438,8 +418,8 @@ function map_popup_shortcode($atts)
             position: relative;
             display: inline-block;
             padding: 10px 20px;
-            background-color: var(--popup_button_background_color);
-            color: var(--popup_button_text_color) !important;
+            background-color: var(--popup_button_background_color_6);
+            color: var(--popup_button_text_color_7) !important;
             text-align: center;
             border-radius: 5px;
             transition: all 0.5s;
@@ -453,7 +433,7 @@ function map_popup_shortcode($atts)
             right: 0;
             bottom: 0;
             left: 0;
-            background-color: var(--popup_button_background_color);
+            background-color: var(--popup_button_background_color_6);
             filter: brightness(100%);
             z-index: -1;
             border-radius: 5px;
@@ -521,6 +501,15 @@ function map_popup_shortcode($atts)
                 max-width: 100%;
                 display: block;
             }
+
+            .dealers-on-region {
+                width: 100%;
+                left: -5%;
+            }
+
+            .common-information h4 {
+                font-size: 18px;
+            }
         }
     </style>
     <script>
@@ -529,7 +518,7 @@ function map_popup_shortcode($atts)
             const turkiye = $("#turkiye g");
             const dealers = $(".dealers-on-region");
             const close = $(".close");
-            const selectedAreaColor = "<?php echo $map_selected_area_color; ?>"
+            const selectedAreaColor = "<?php echo $map_selected_area_color_3; ?>"
 
             dealers.hide();
 
@@ -565,6 +554,6 @@ function map_popup_shortcode($atts)
     ob_end_clean();
     return $output;
 }
-add_shortcode('map_popup', 'map_popup_shortcode');
+add_shortcode('mn_map_popup', 'mn_map_popup_shortcode');
 
 ?>
