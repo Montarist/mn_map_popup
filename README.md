@@ -14,7 +14,7 @@
 
 ## Description
 
-[MN Map Popup](https://wordpress.com/plugins/mn-map-popup) is a plugin that allows you to create a custom post type for popups and display dealer or representative information on selected regions using dnomak Turkey Map.
+[MN Map Popup](https://wordpress.com/plugins/mn-map-popup) is a plugin that allows you to create a custom post type for popups and display dealer or representative information on selected regions using [dnomak Turkey Map](https://github.com/dnomak/svg-turkiye-haritasi).
 
 With this plugin, you can create unique popups for each region of Turkey and fill them with the information of your choosing.
 
